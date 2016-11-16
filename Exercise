@@ -1,0 +1,98 @@
+=begin
+Bigger is Greater
+
+Given a word , rearrange the letters of  to construct another word  in such a way that  is lexicographically greater than . In case of multiple possible answers, find the lexicographically smallest one among them.
+
+*Input Format*
+The first line of input contains , the number of test cases. Each of the next  lines contains .
+
+*Constraints*
+-> 1 <= t <= 10^5
+-> 1 <= |w| <= 100
+-> "w" will contain only lower-case English letters and its length will not exceed .
+
+*Output Format*
+For each testcase, output a string lexicographically bigger than  in a separate line. In case of multiple possible answers, print the lexicographically smallest one, and if no answer exists, print no answer.
+
+*Sample Input*
+5
+ab
+bb
+hefg
+dhck
+dkhc
+*Sample Output*
+ba
+no answer
+hegf
+dhkc
+hcdk
+
+*Explanation*
+- Test case 1: 
+There exists only one string greater than ab which can be built by rearranging ab. That is ba.
+- Test case 2: 
+Not possible to rearrange bb and get a lexicographically greater string.
+- Test case 3: 
+hegf is the next string lexicographically greater than hefg.
+- Test case 4: 
+dhkc is the next string lexicographically greater than dhck.
+- Test case 5: 
+hcdk is the next string lexicographically greater than dkhc.
+=end
+
+t = 5.to_i
+w = ["ab", "bb", "hefg", "dhck", "dkhc"]
+w_char = [["a", "d","c","b"], ["b","b"],["h","e","f","g"],["d","h","c","k"],["d","k","h","c"]]
+
+new = []
+for x in (0..t-1)
+    new_i = []
+    if w_char[x].uniq.count == 1
+        new_i.push("no answer")
+        new.push(new_i)
+    else
+        y = w_char[x].count
+        for m in (0..y-2)
+            p = y - 1 - m
+            if w_char[x][p] > w_char[x][p-1]
+                arr_aux=[]
+                for i in p-1..y-1
+                    arr_aux.push(w_char[x][i])
+                end
+                
+                arr_aux_next=[]
+                arr_aux.select {|a| a > w_char[x][0] ? arr_aux_next.push(a) : nil}
+                arr_aux_next.sort!
+                next_letter = arr_aux_next.first
+                
+                arr_aux.sort!
+                arr_aux.reverse!
+                
+                if p == y-1
+                    for i in (0..p-2) 
+                        new_i.push(w_char[x][i])
+                    end
+                    for i in (0..1)
+                        new_i.push(arr_aux[i])
+                    end
+                    new.push(new_i)
+                else
+                    new_i[0] = next_letter
+                    arr_aux.reverse!
+                    arr_aux.select {|a| a != next_letter ? new_i.push(a) : nil}
+                    new.push(new_i)
+                end
+                break
+            end
+        end
+    end
+end
+
+for x in (0..t-1)
+    a = new[x].count
+    for y in (0..a-1)
+        print new[x][y]
+    end
+    puts
+end
