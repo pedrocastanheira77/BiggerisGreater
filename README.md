@@ -1,0 +1,2 @@
+# BiggerisGreater
+Hacker Rank exercise
