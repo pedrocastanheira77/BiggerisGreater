@@ -2,7 +2,6 @@
 fileObjOut = File.open("output01.txt")
 fileObj = File.open("input01.txt")
 
-# Extração de Dados
 t =  1000
 fileObj.gets.to_i
 w = []
@@ -19,7 +18,6 @@ for j2 in 0...t
 	i2 = i2[0..-2].split("")
 	w_char2.push(i2)
 end
-# Fim extração de Dados
 
 @errors = 0
 @ok = 0	
