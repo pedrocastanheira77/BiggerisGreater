@@ -1,79 +1,89 @@
-=begin
-Bigger is Greater
 
-Given a word , rearrange the letters of  to construct another word  in such a way that  is lexicographically greater than . In case of multiple possible answers, find the lexicographically smallest one among them.
+fileObjOut = File.open("output01.txt")
+fileObj = File.open("input01.txt")
 
-*Input Format*
-The first line of input contains , the number of test cases. Each of the next  lines contains .
+# Extração de Dados
+t =  1000
+fileObj.gets.to_i
+w = []
+word = []
+w_char = []
+w_char2 = []
+for j in 0...t
+	i = fileObj.gets
+	i = i[0..-2].split("")
+	w_char.push(i)
+end
+for j2 in 0...t
+	i2 = fileObjOut.gets
+	i2 = i2[0..-2].split("")
+	w_char2.push(i2)
+end
+# Fim extração de Dados
 
-*Constraints*
--> 1 <= t <= 10^5
--> 1 <= |w| <= 100
--> "w" will contain only lower-case English letters and its length will not exceed .
+@errors = 0
+@ok = 0	
+def valida(my_output,output)
+	if my_output == output.join
+		print my_output
+		puts
+		@ok += 1
+	else
+		puts "==================="
+		print my_output
+		puts "vs"
+		print output.join
+		puts
+		puts "==================="
+		@errors += 1
+	end
+end
 
-*Output Format*
-For each testcase, output a string lexicographically bigger than  in a separate line. In case of multiple possible answers, print the lexicographically smallest one, and if no answer exists, print no answer.
-
-*Sample Input*
-5
-ab
-bb
-hefg
-dhck
-dkhc
-*Sample Output*
-ba
-no answer
-hegf
-dhkc
-hcdk
-
-*Explanation*
-- Test case 1: 
-There exists only one string greater than ab which can be built by rearranging ab. That is ba.
-- Test case 2: 
-Not possible to rearrange bb and get a lexicographically greater string.
-- Test case 3: 
-hegf is the next string lexicographically greater than hefg.
-- Test case 4: 
-dhkc is the next string lexicographically greater than dhck.
-- Test case 5: 
-hcdk is the next string lexicographically greater than dkhc.
-=end
-
-t = 5.to_i
-w = ["ab", "bb", "hefg", "dhck", "dkhc"]
-w_char = [["a", "b"], ["b","b"],["h","e","f","g"],["d","h","c","k"],["d","k","h","c"]]
-
-new = []
-for n in (0..t-1)
+for n in (0...t)
     new_i = []
     arr_len = w_char[n].count-1
+    counter = 1
+    
     if w_char[n].uniq.count == 1
-        puts "no answer"
-    elsif (w_char[n][arr_len] > w_char[n][arr_len-1])
-        a = w_char[n][arr_len]
-        b = w_char[n][arr_len-1]
-        w_char[n][arr_len-1] = a
-        w_char[n][arr_len] = b
-        print w_char[n]
-        puts
-    else
-        w_char[n]
-        cont = 0
-        for i in 0..arr_len
-            w_char[n][arr_len-i] < w_char[n][arr_len-i-1] ? cont +=1 : break
-            puts cont
-        end
-
-        for i in 0..(arr_len-cont-2)
-            novo_arr.push(w_char[x][i])
-        end
-        
-            novo_arr[arr_len-cont-1] = a valor
-        
-        for i in (arr_len-cont)..arr_len
-            no_arr[i]
-        end
-    end
+        valida("no answer",w_char2[n])
+	
+	elsif w_char[n][-1] > w_char[n][-2]
+		if w_char.count > 2
+			res = "#{w_char[n][0..-3].join}#{w_char[n][-1]}#{w_char[n][-2]}"
+			valida(res,w_char2[n])
+		else w_char.count <= 2
+			res = "#{w_char[n][-1]}#{w_char[n][-2]}" 
+			valida(res,w_char2[n])
+		end
+	
+	else
+		for i in 0...w_char[n].count
+			w_char[n][arr_len-i] > w_char[n][arr_len-i-1] ? break : counter += 1
+		end
+		if arr_len == counter
+			aux1 = Array.new
+			aux1 = w_char[n].select {|x| x > w_char[n][arr_len-counter]}
+			aux2 = Array.new(w_char[n])
+			aux2.sort!.delete_at(aux2.index(aux1.sort![0]))
+			res = "#{aux1.sort![0]}#{aux2.join}"
+			valida(res,w_char2[n])
+		elsif arr_len > counter
+			aux1 = Array.new
+			aux1 = w_char[n][arr_len-counter+1..arr_len].select {|x| x > w_char[n][arr_len-counter]}
+			aux2 = Array.new(w_char[n][(arr_len-counter)..arr_len])
+			aux2.sort!.delete_at(aux2.index(aux1.sort![0]))
+			res = "#{w_char[n][0..arr_len-counter-1].join}#{aux1.sort![0]}#{aux2.join}"
+			valida(res,w_char2[n])
+		else
+			valida("no answer",w_char2[n])
+		end	
+	end
 end
+
+puts "----------------------------------------"
+puts "Report:"
+puts "Ok : #{@ok}"
+puts "Errors : #{@errors}"
+
+fileObj.close
+fileObjOut.close
