@@ -43,56 +43,37 @@ hcdk is the next string lexicographically greater than dkhc.
 
 t = 5.to_i
 w = ["ab", "bb", "hefg", "dhck", "dkhc"]
-w_char = [["a", "d","c","b"], ["b","b"],["h","e","f","g"],["d","h","c","k"],["d","k","h","c"]]
+w_char = [["a", "b"], ["b","b"],["h","e","f","g"],["d","h","c","k"],["d","k","h","c"]]
 
 new = []
-for x in (0..t-1)
+for n in (0..t-1)
     new_i = []
-    if w_char[x].uniq.count == 1
-        new_i.push("no answer")
-        new.push(new_i)
+    arr_len = w_char[n].count-1
+    if w_char[n].uniq.count == 1
+        puts "no answer"
+    elsif (w_char[n][arr_len] > w_char[n][arr_len-1])
+        a = w_char[n][arr_len]
+        b = w_char[n][arr_len-1]
+        w_char[n][arr_len-1] = a
+        w_char[n][arr_len] = b
+        print w_char[n]
+        puts
     else
-        y = w_char[x].count
-        for m in (0..y-2)
-            p = y - 1 - m
-            if w_char[x][p] > w_char[x][p-1]
-                arr_aux=[]
-                for i in p-1..y-1
-                    arr_aux.push(w_char[x][i])
-                end
-                
-                arr_aux_next=[]
-                arr_aux.select {|a| a > w_char[x][0] ? arr_aux_next.push(a) : nil}
-                arr_aux_next.sort!
-                next_letter = arr_aux_next.first
-                
-                arr_aux.sort!
-                arr_aux.reverse!
-                
-                if p == y-1
-                    for i in (0..p-2) 
-                        new_i.push(w_char[x][i])
-                    end
-                    for i in (0..1)
-                        new_i.push(arr_aux[i])
-                    end
-                    new.push(new_i)
-                else
-                    new_i[0] = next_letter
-                    arr_aux.reverse!
-                    arr_aux.select {|a| a != next_letter ? new_i.push(a) : nil}
-                    new.push(new_i)
-                end
-                break
-            end
+        w_char[n]
+        cont = 0
+        for i in 0..arr_len
+            w_char[n][arr_len-i] < w_char[n][arr_len-i-1] ? cont +=1 : break
+            puts cont
+        end
+
+        for i in 0..(arr_len-cont-2)
+            novo_arr.push(w_char[x][i])
+        end
+        
+            novo_arr[arr_len-cont-1] = a valor
+        
+        for i in (arr_len-cont)..arr_len
+            no_arr[i]
         end
     end
-end
-
-for x in (0..t-1)
-    a = new[x].count
-    for y in (0..a-1)
-        print new[x][y]
-    end
-    puts
 end
